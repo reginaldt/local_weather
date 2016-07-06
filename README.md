@@ -12,3 +12,7 @@ A simple application that can display weather in your current location. One of t
 # License
 
 MIT License. [Click here for more information.](LICENSE)
+
+# Limitations
+
+You can only run the app in http. Https is only supported in paid services of [openweatherapp.org](http://openweathermap.org/price)
