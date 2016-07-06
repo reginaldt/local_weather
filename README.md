@@ -1,6 +1,6 @@
 # Local Weather
 
-A simple application that can display weather in your current location. One of the intermediate front end projects of [FreeCodeCamp](https://www.freecodecamp.com/challenges/build-a-simon-game)
+A simple application that can display weather in your current location. One of the intermediate front end projects of [FreeCodeCamp](https://www.freecodecamp.com/challenges/show-the-local-weather)
 
 
 # User Stories
