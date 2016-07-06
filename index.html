@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	
+	</style>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	
+
+</head>
+<body>
+	<div class="container">
+		<div class="header clearfix">
+	        <nav>
+	          <ul class="nav nav-pills pull-right">
+	            <li role="presentation"><a href="http://codepen.io/reginaldt/" target="_blank">CodePen Profile</a></li>
+	            <li role="presentation"><a href="http://reginaldtapan.com" target="_blank">My Contact</a></li>
+	          </ul>
+	        </nav>
+	        <h3>Local Weather</h3>
+      	</div>
+      	<div class="jumbotron">
+	        <h1 id="temperature">Loading...</h1>
+	        <p class="lead" id = "location">Please Wait...</p>
+	        <p><a class="btn btn-lg btn-success" id="temp-convert" href="#" role="button">Powered by Openweather.org</a></p>
+	    </div>
+
+
+	      <footer class="footer">
+	        <p>&copy; 2015 FreeCodeCamp.</p>
+	      </footer>
+	</div>
+	
+	<script   src="https://code.jquery.com/jquery-1.12.4.min.js"   integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="   crossorigin="anonymous"></script>
+	<script type="text/javascript">
+
+		function openWeatherMap(){
+			var 
+			lon,
+			lat,
+			name,
+			main_description,
+			temp_celsius,
+			temp_fahrenheit,
+			icon,
+			country,
+			isMetric = true;
+			var that = this;
+
+			this.errorMsg = '';
+
+			this.getWeatherHeader = function(){
+				var returnData = '';
+				if(isMetric){
+					returnData = icon + " " + main_description + "<br />" + temp_celsius + " C";
+				}
+				else
+				{
+					returnData = icon + " " + main_description + "<br />" + temp_fahrenheit + " F";
+				}
+				return returnData;
+			}
+			this.getLocationDetail = function(){
+				return name + " " + country;
+			}
+
+			this.setBackgroundImage = function(weather){
+				$('body').css('color','white','important');
+
+				if(weather === "clear"){
+					$('body').css('background-image','url(https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTfG07LrYwk1iNR0VLtX3B8-aQVwVMrUk1N7LMPWOg97_6UKVA_-Q)');
+
+				}
+				else if( weather === "clouds"){			
+					$('body').css('background-image',"url(http://www.mynews13.com/content/dam/news/images/2013/06/weather-seminole-county-clouds-062813.JPG)");
+				}
+				else if( weather === "mist"){			
+					$('body').css('background-image',"url(http://www.zocalopublicsquare.org/wp-content/uploads/2010/05/mist.jpg)");
+				}
+				else if( weather === "rain"){			
+					$('body').css('background-image',"url(http://wearechange.org/wp-content/uploads/2015/03/1_See_It.jpg)");
+				}
+				else{
+					$('body').css('color','black','important');
+					$('body').css('background-image',"url(http://98five.com/wp-content/uploads/2015/08/Weather-1.gif)");
+				}
+			}
+			
+			
+
+			this.setWeatherData = function(){
+				if (navigator.geolocation){
+					navigator.geolocation.getCurrentPosition(function(position){
+						lat = position.coords.latitude;
+						lon = position.coords.longitude
+
+						$.getJSON("http://api.openweathermap.org/data/2.5/weather?lat="+ lat + "&lon=" + lon+"&appid=536630d96265470fca1dd159ad22a38d&units=metric", function(json) {
+
+					    	name = json.name;
+					    	main_description = json.weather[0].description;
+					    	temp_celsius = json.main.temp;
+					    	temp_fahrenheit = ( ((parseFloat(temp_celsius) * 9) / 5) + 32  ).toFixed(2);
+					    	icon = '<img src = "http://openweathermap.org/img/w/' +json.weather[0].icon+ '.png">';
+					    	country = json.sys.country;
+					    	var main_weather = String(json.weather[0].main).toLowerCase();
+
+					    	$('#temperature').html( that.getWeatherHeader() );
+					    	$('#location').html(that.getLocationDetail());
+					    	$('#temp-convert').text('Convert to F');
+
+					    	that.setBackgroundImage(main_weather);
+
+
+
+
+					    	$('#temp-convert').click(function(){
+					    		if(isMetric){
+					    			isMetric =false;
+					    			$('#temp-convert').text('Convert to C');
+					    		}
+					    		else{
+					    			isMetric = true;
+					    			$('#temp-convert').text('Convert to F');
+					    		}
+					    		$('#temperature').html( that.getWeatherHeader() );
+					    	});
+
+					    });
+
+					});
+
+					
+				}
+				else{
+					this.errorMsg = 'geolocation';
+				}
+				
+			}
+
+		}
+			$(document).ready(function(){
+				var weather = new openWeatherMap();
+				weather.setWeatherData();
+				
+			});
+	</script>
+</body>
+</html>
