@@ -96,7 +96,7 @@
 						lat = position.coords.latitude;
 						lon = position.coords.longitude
 
-						$.getJSON("https://api.openweathermap.org/data/2.5/weather?lat="+ lat + "&lon=" + lon+"&appid=536630d96265470fca1dd159ad22a38d&units=metric", function(json) {
+						$.getJSON("http://api.openweathermap.org/data/2.5/weather?lat="+ lat + "&lon=" + lon+"&appid=536630d96265470fca1dd159ad22a38d&units=metric", function(json) {
 
 					    	name = json.name;
 					    	main_description = json.weather[0].description;
